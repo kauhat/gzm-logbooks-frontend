@@ -1,11 +1,14 @@
-import { NuxtApp } from '#app'
+
 import RemoteStorage from 'remotestoragejs'
 
 /**
  * Register the plugin...
  */
 export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
-  const { appInfo, services } = useRuntimeConfig()
+  const config = useRuntimeConfig()
+  const { appInfo, services } = config.public
+
+  console.log({appInfo, config})
 
   const remoteStorage = setupRemoteStorage({
     rootPath: appInfo.name,

@@ -12,16 +12,13 @@ export const collections = {
   logbooks: {
     schema: logbookSchema,
 
-    // migrationStrategies: {
-    //   // TODO: Add migrations for previous versions.
+    migrationStrategies: {
+      // TODO: Add migrations for previous versions.
 
-    //   1: function (oldDoc) {
-    //     return null
-    //   },
-    //   2: function (oldDoc) {
-    //     return null
-    //   }
-    // },
+      1: function (oldDoc) {
+        return oldDoc
+      },
+    },
 
     methods: {
       getRoute () {
@@ -60,16 +57,16 @@ export const collections = {
   entries: {
     schema: entrySchema,
 
-    // migrationStrategies: {
+    migrationStrategies: {
     //   // TODO: Add migrations for previous versions.
 
-    //   1: function (oldDoc) {
-    //     return null
-    //   },
+      1: function (oldDoc) {
+        return oldDoc
+      },
     //   2: function (oldDoc) {
     //     return null
     //   }
-    // },
+    },
 
     methods: {
       getRoute () {

@@ -97,7 +97,7 @@ import { useDatabase } from '~/store/database'
 
 export default {
   data () {
-    const { siteTitle: title, appInfo } = this.$config
+    const { siteTitle: title, appInfo } = this.$config.public
     const { buildName } = appInfo
 
     return {

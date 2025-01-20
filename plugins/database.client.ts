@@ -1,4 +1,3 @@
-import { NuxtApp } from '#app'
 import { useDatabase } from '~/store/database'
 
 /**
@@ -7,12 +6,12 @@ import { useDatabase } from '~/store/database'
 export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
   const { rxdb, createDatabase } = useDatabase()
 
-  createDatabase()
+  // createDatabase()
 
   return {
     // Add $db and $seed fields to app context.
     provide: {
-      rxdb
+      rxdb: () => rxdb
     }
   }
 })

@@ -23,7 +23,7 @@
         "<node_internals>/**"
       ],
       "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "bun",
       "runtimeArgs": [
           "run", "dev"
       ],

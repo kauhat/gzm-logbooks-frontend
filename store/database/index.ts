@@ -5,23 +5,21 @@ import {
   removeRxDatabase,
   RxStorage
 } from 'rxdb'
-
+import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
+import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 // import { addPouchPlugin,  } from 'rxdb/plugins/lokijs'
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
-import { RxDBMigrationPlugin } from 'rxdb/plugins/migration'
-import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
+import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema';// import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
 // import * as IndexeddbAdaptor from 'pouchdb-adapter-indexeddb'
-
-import { getRxStorageLoki } from 'rxdb/plugins/lokijs'
-import LokiIncrementalIndexedDBAdapter from 'lokijs/src/incremental-indexeddb-adapter'
+import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { schemas, collections } from '~/data/database'
 import { seedFakeLogbook } from '~/store/database/seeder'
 
 // Add plugins.
-addRxPlugin(RxDBValidatePlugin)
+// addRxPlugin(RxDBValidatePlugin)
 addRxPlugin(RxDBQueryBuilderPlugin)
-addRxPlugin(RxDBMigrationPlugin)
+// addRxPlugin(RxDBMigrationSchemaPlugin)
 // addPouchPlugin(IndexeddbAdaptor)
 
 // Add the dev plugins.
@@ -36,27 +34,21 @@ export const useDatabase = defineStore('entriesDb', () => {
   /**
    *
    */
-  async function createDatabase () {
-    storage.value = getRxStorageLoki({
-      adapter: new LokiIncrementalIndexedDBAdapter()
-    //  autosave: true, autosaveInterval: 5000, autoload: true, persistenceMethod: 'memory'
-    })
+  async function createDatabase() {
+    storage.value = getRxStorageDexie()
 
     db.value = await createRxDatabase({
       name: 'logbooks',
-      storage: getRxStorageLoki({
-        adapter: new LokiIncrementalIndexedDBAdapter()
-      //  autosave: true, autosaveInterval: 5000, autoload: true, persistenceMethod: 'memory'
+      storage: wrappedValidateAjvStorage({
+        storage: storage.value
       })
-    }).then((db) => {
-      try {
-        db.addCollections(collections)
+    })
+
+    db.value.addCollections(collections)
+    try {
       } catch {
 
       }
-
-      return db
-    })
 
     // Delay for testing 😈
     // // await new Promise((resolve) => {
@@ -69,7 +61,7 @@ export const useDatabase = defineStore('entriesDb', () => {
   /**
    *
    */
-  async function resetDatabase () {
+  async function resetDatabase() {
     if (confirm('This will delete all of your data!') !== true) {
       return
     }
@@ -80,16 +72,18 @@ export const useDatabase = defineStore('entriesDb', () => {
     await removeRxDatabase('logbooks', storage.value)
   }
 
-  function getLogbooksQuery () {
+  function getLogbooksQuery() {
     // rxdb.logbooks.findOne(logbookId)
   }
 
-  function getLogbookEntriesQuery (logbook: string) {
+  function getLogbookEntriesQuery(logbook: string) {
     return db.value.entries
       .find()
       .where({ logbook })
       .sort('timestamp')
   }
+
+  createDatabase()
 
   return {
     db,

@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <Head>
-      <Script type="text/css" children="body { background-color: green; }" />
+      <!-- <Script type="text/css" children="body { background-color: green; }" /> -->
     </Head>
 
     <div class="flex flex-col grow" :data-theme="themeName">
@@ -25,16 +25,6 @@ import { useDatabase } from '~/store/database'
 
 <script lang="ts">
 import { useConfigStore } from '~/store/config'
-
-const { rxdb } = useDatabase()
-
-// useHead({
-//   script: [
-//     {
-//       body: 'window.global = window;'
-//     }
-//   ]
-// })
 
 export default {
   computed: {

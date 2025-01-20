@@ -1,4 +1,3 @@
-import { defineNuxtConfig } from 'nuxt'
 import EnvCompatPlugin from 'vite-plugin-env-compatible'
 import { nodeResolve as NodeResolvePlugin } from '@rollup/plugin-node-resolve'
 import { name, version } from './package.json'
@@ -32,7 +31,8 @@ export default defineNuxtConfig({
   target: 'static',
 
   // https://nuxtjs.org/guide/runtime-config
-  publicRuntimeConfig: {
+  runtimeConfig: {
+  public: {
     siteTitle,
     appInfo: { name, version, branch, shaRef, buildName },
 
@@ -41,6 +41,7 @@ export default defineNuxtConfig({
       googleDriveClientId: process.env.GOOGLE_DRIVE_CLIENT_ID
     }
   },
+},
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -83,7 +84,7 @@ export default defineNuxtConfig({
     // '@nuxtjs/eslint-config-typescript',
 
     // https://go.nuxtjs.dev/tailwindcss
-    '@nuxtjs/tailwindcss',
+    // '@nuxtjs/tailwindcss',
 
     // https://vueformulate.com/guide
     // '@braid/vue-formulate/nuxt',
@@ -92,10 +93,7 @@ export default defineNuxtConfig({
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
-  ],
+  modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss'],
 
   //
   generate: {
@@ -141,6 +139,7 @@ export default defineNuxtConfig({
     // aggressiveCodeRemoval: true,
   },
 
+  // alias: { global: 'global.ts' }
   vite: {
     plugins: [
       // NodeResolvePlugin(),
@@ -161,7 +160,7 @@ export default defineNuxtConfig({
       // allowNodeBuiltins: ["pouchdb-browser", "pouchdb-utils"],
       // esbuildOptions: {},
     }
-  }
+  },
 
-  // alias: { global: 'global.ts' }
+  compatibilityDate: '2025-01-20'
 })

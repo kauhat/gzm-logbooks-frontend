@@ -1,7 +1,7 @@
 // import pluginForms from '@tailwindcss/forms'
 import pluginTypography from '@tailwindcss/typography'
 import pluginDaisy from 'daisyui'
-import daisyThemes from 'daisyui/src/colors/themes'
+import daisyThemes from 'daisyui/src/theming/themes'
 
 /*
  ** TailwindCSS Configuration File
