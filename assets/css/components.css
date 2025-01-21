@@ -1,0 +1,79 @@
+@layer components {
+  .link {
+    @apply underline hover:no-underline;
+    @apply text-gray-500 hover:text-gray-700;
+  }
+
+  /*  */
+  .button {
+    @apply link;
+    @apply inline-flex items-center;
+    @apply text-sm py-2 px-4;
+    @apply font-medium;
+    @apply rounded shadow;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75;
+  }
+
+  .button--disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .button--center {
+    @apply justify-center;
+  }
+
+  .button--default {
+    @apply bg-gray-500 text-gray-50 hover:bg-gray-700 hover:text-gray-50;
+  }
+
+  .button--outline {
+    @apply border border-gray-500 text-gray-500;
+    @apply hover:text-gray-800 hover:border-gray-800;
+  }
+
+  .button__icon {
+    @apply h-full mx-2;
+    @apply no-underline;
+  }
+
+  /* .button > :first-child.button__icon {
+    @apply ml-0;
+  }
+
+  .button > :last-child.button__icon {
+    @apply mr-0;
+  } */
+
+  /*  */
+  .input {
+    @apply px-3 py-2 leading-none mb-1;
+    /* @apply border border-gray-200 focus:border-gray-400; */
+    @apply rounded-sm shadow-sm;
+    /* @apply focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75; */
+  }
+
+  /*  */
+  .card {
+    @apply flex flex-col overflow-hidden;
+    @apply shadow-sm sm:rounded;
+    @apply divide-y;
+    /* @apply border-gray-600; */
+  }
+
+  .card,
+  .card__section,
+  .card__content {
+    @apply flex flex-col;
+    /* @apply backdrop-filter backdrop-blur-sm; */
+    @apply bg-gray-200 bg-opacity-40;
+  }
+
+  .card__section,
+  .card__content {
+    @apply px-4 py-3;
+  }
+
+  .card__content {
+    @apply flex-grow;
+  }
+}

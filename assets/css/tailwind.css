@@ -1,0 +1,28 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* @import "./base.css";
+@import "./components.css"; */
+
+
+:root {
+  --color-comfort-hsl: 173 58% 39%;
+  --color-anxiety-hsl: 12 76% 61%;
+  --color-growth-hsl: 27 87% 67%;
+}
+
+html,
+body {
+  @apply overflow-x-hidden;
+}
+
+body {
+  /* @apply bg-gray-800 bg-cover bg-texture bg-blend-lighten; */
+  /* @apply bg-gray-100 bg-doodles bg-blend-lighten; */
+  /* @apply bg-indigo-100; */
+}
+
+.fill-current {
+  fill: currentColor;
+}

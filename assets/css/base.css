@@ -1,0 +1,14 @@
+@layer base {
+  /* Default button styles */
+  .button:not([class*='button-']) {
+    @apply button--default;
+  }
+
+  button:disabled {
+    @apply button--disabled;
+  }
+
+  a {
+    @apply link;
+  }
+}

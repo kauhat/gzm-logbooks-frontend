@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "@nuxtjs/eslint-config-typescript",
+  ],
+  "rules": {
+    // "prettier/prettier": "warn",
+    "no-unused-vars": "warn",
+    "spaced-comment": "warn",
+  }
+}
