@@ -21,6 +21,8 @@
 <script setup lang="ts">
 
 import { useDatabase } from '~/store/database'
+
+const {rxdb} = useDatabase()
 </script>
 
 <script lang="ts">

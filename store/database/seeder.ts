@@ -52,7 +52,7 @@ const entryFactory = (
  * Create a demo logbook and fill it with fake data.
  */
 export const seedFakeLogbook = async function (db: RxDatabase, delay = 200): RxDocument {
-  console.log(db.logbooks)
+  console.log(db)
 
   const logbook: RxDocument = await db.logbooks.insert({
     name: 'Example Logbook'

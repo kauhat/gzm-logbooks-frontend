@@ -19,7 +19,7 @@ import { seedFakeLogbook } from '~/store/database/seeder'
 // Add plugins.
 // addRxPlugin(RxDBValidatePlugin)
 addRxPlugin(RxDBQueryBuilderPlugin)
-// addRxPlugin(RxDBMigrationSchemaPlugin)
+addRxPlugin(RxDBMigrationSchemaPlugin)
 // addPouchPlugin(IndexeddbAdaptor)
 
 // Add the dev plugins.
@@ -28,8 +28,8 @@ if (import.meta.env.DEV) {
 }
 
 export const useDatabase = defineStore('entriesDb', () => {
-  const storage = ref<RxStorage<any, any>>()
-  const db = ref<RxDatabase>()
+  const storage = shallowRef<RxStorage<any, any>>()
+  const db = shallowRef<RxDatabase>()
 
   /**
    *
@@ -45,6 +45,8 @@ export const useDatabase = defineStore('entriesDb', () => {
     })
 
     db.value.addCollections(collections)
+
+    console.log(db.value)
     try {
       } catch {
 
@@ -85,6 +87,7 @@ export const useDatabase = defineStore('entriesDb', () => {
 
   createDatabase()
 
+
   return {
     db,
     rxdb: db,
@@ -96,7 +99,10 @@ export const useDatabase = defineStore('entriesDb', () => {
     getLogbookEntriesQuery,
     // fetchState: db,
     // entries:  computed(() => db.value.entries),
-    seed: () => { seedFakeLogbook(db.value) }
+    seed: () => {
+
+      console.log(db.value)
+      seedFakeLogbook(db.value) }
   }
 })
 

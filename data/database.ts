@@ -14,14 +14,13 @@ export const collections = {
 
     migrationStrategies: {
       // TODO: Add migrations for previous versions.
-
-      1: function (oldDoc) {
-        return oldDoc
-      },
+           1: () => { },
+                            2: () => { },
+                            3: () => { },
     },
 
     methods: {
-      getRoute () {
+      getRoute() {
         const { primary } = this
 
         if (!primary) {
@@ -36,7 +35,7 @@ export const collections = {
         }
       },
 
-      getNewEntryRoute () {
+      getNewEntryRoute() {
         const { primary } = this
 
         if (!primary) {
@@ -58,18 +57,14 @@ export const collections = {
     schema: entrySchema,
 
     migrationStrategies: {
-    //   // TODO: Add migrations for previous versions.
-
-      1: function (oldDoc) {
-        return oldDoc
-      },
-    //   2: function (oldDoc) {
-    //     return null
-    //   }
+      // TODO: Add migrations for previous versions.
+           1: () => { },
+                            2: () => { },
+                            3: () => { }
     },
 
     methods: {
-      getRoute () {
+      getRoute() {
         const { primary, logbook } = this
 
         if (!primary || !logbook) {
