@@ -15,11 +15,11 @@ export default {
   data () {
     return {
       sizes: [
-        { width: 'xl' },
-        { breakpoint: 'sm' },
-        { breakpoint: 'md', width: '4xl' },
-        { breakpoint: 'lg' },
-        { breakpoint: 'xl', width: '7xl' }
+        { width: 'xl' },                      // max-w-xl
+        { breakpoint: 'sm' },                 // sm:max-w-xl
+        { breakpoint: 'md', width: '4xl' },   // md:max-w-4xl
+        { breakpoint: 'lg' },                 // lg:max-w-4xl
+        { breakpoint: 'xl', width: '7xl' }    // xl:max-w-7xl
       ]
     }
   },

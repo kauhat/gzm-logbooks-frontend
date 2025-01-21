@@ -14,9 +14,9 @@ export const collections = {
 
     migrationStrategies: {
       // TODO: Add migrations for previous versions.
-           1: () => { },
-                            2: () => { },
-                            3: () => { },
+      1: () => { },
+      2: () => { },
+      3: () => { },
     },
 
     methods: {
@@ -58,9 +58,9 @@ export const collections = {
 
     migrationStrategies: {
       // TODO: Add migrations for previous versions.
-           1: () => { },
-                            2: () => { },
-                            3: () => { }
+      1: () => { },
+      2: () => { },
+      3: () => { }
     },
 
     methods: {
