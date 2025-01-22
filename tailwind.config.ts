@@ -3,6 +3,8 @@ import pluginTypography from '@tailwindcss/typography'
 import pluginDaisy from 'daisyui'
 import daisyThemes from 'daisyui/src/theming/themes'
 
+// console.log(daisyThemes)
+
 /*
  ** TailwindCSS Configuration File
  **
@@ -75,7 +77,7 @@ export default {
     // pluginForms,
     pluginTypography,
     pluginDaisy
-  ]
+  ],
 
   // content: ['formulate.config.*', 'nuxt.config.*', 'layouts/', 'components/**/*' ],
 }
