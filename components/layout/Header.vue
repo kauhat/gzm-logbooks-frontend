@@ -127,13 +127,9 @@ export default {
       const { $router } = this
 
       try {
-        useDatabase().resetDatabase()
+        await useDatabase().resetDatabase()
       } finally {
-        // $router.go('/')
-        useNuxtApp()
-
-        // TODO: Doesn't work.
-        await this.$nuxt.refresh()
+        await reloadNuxtApp();
       }
     }
   }
