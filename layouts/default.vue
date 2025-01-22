@@ -4,7 +4,7 @@
       <!-- <Script type="text/css" children="body { background-color: green; }" /> -->
     </Head>
 
-    <div class="flex flex-col grow" :data-theme="themeName">
+    <div class="flex flex-col grow">
       <LayoutHeader />
 
       <LayoutContainer max="lg" class="my-4 px-2">
@@ -19,8 +19,14 @@
 </template>
 
 <script setup lang="ts">
-
 import { useDatabase } from '~/store/database'
+const {currentTheme} = storeToRefs(useConfigStore())
+
+useHead({
+  bodyAttrs: {
+    'data-theme': currentTheme
+  }
+})
 
 const {rxdb} = useDatabase()
 </script>
