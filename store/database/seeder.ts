@@ -1,4 +1,5 @@
-import { RxDatabase, RxDocument } from 'rxdb'
+import type { RxDatabase, RxDocument } from 'rxdb'
+import { nanoid } from 'nanoid'
 import { growthInputDefaults, validateMoodInput } from '~/data/config'
 
 const hour = 1000 * 60 * 60
@@ -55,6 +56,7 @@ export const seedFakeLogbook = async function (db: RxDatabase, delay = 200): RxD
   console.log(db)
 
   const logbook: RxDocument = await db.logbooks.insert({
+    id: nanoid(),
     name: 'Example Logbook'
   })
 

@@ -13,7 +13,7 @@
           </FormKit>
 
           <h1 v-else>
-            {{ $get(logbook, 'name') }}
+            {{ logbook.value.name }}
           </h1>
         </div>
       </template>

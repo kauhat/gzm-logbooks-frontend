@@ -1,23 +1,23 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import {
-  RxDatabase, addRxPlugin,
-  createRxDatabase,
-  removeRxDatabase,
+import type {
+  RxDatabase,
   RxStorage
+} from 'rxdb';
+import { addRxPlugin,
+  createRxDatabase,
+  removeRxDatabase
 } from 'rxdb'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 // import { addPouchPlugin,  } from 'rxdb/plugins/lokijs'
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
-import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema';// import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
+import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema'
 // import * as IndexeddbAdaptor from 'pouchdb-adapter-indexeddb'
-import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { schemas, collections } from '~/data/database'
 import { seedFakeLogbook } from '~/store/database/seeder'
 
 // Add plugins.
-// addRxPlugin(RxDBValidatePlugin)
 addRxPlugin(RxDBQueryBuilderPlugin)
 addRxPlugin(RxDBMigrationSchemaPlugin)
 // addPouchPlugin(IndexeddbAdaptor)
@@ -28,37 +28,41 @@ if (import.meta.env.DEV) {
 }
 
 export const useDatabase = defineStore('entriesDb', () => {
-  const storage = shallowRef<RxStorage<any, any>>()
   const db = shallowRef<RxDatabase>()
+
+  const storage = shallowRef<RxStorage<any, any>>(
+      wrappedValidateAjvStorage({
+      storage: getRxStorageDexie()
+    }
+  ))
 
   /**
    *
    */
   async function createDatabase() {
-    storage.value = getRxStorageDexie()
-
     db.value = await createRxDatabase({
       name: 'logbooks',
-      storage: wrappedValidateAjvStorage({
-        storage: storage.value
-      })
+      storage: storage.value
     })
 
-    db.value.addCollections(collections)
+    await db.value.addCollections(collections)
+      .then(async function (db) {
+        // Delay for testing 😈
+        // // await new Promise((resolve) => {
+        // //   setTimeout(resolve, 6666)
+        // // })
 
-    console.log(db.value)
-    try {
-      } catch {
+        console.log(await db.logbooks.find().exec())
 
-      }
+        const observable = db.logbooks.find().$;
 
-    // Delay for testing 😈
-    // // await new Promise((resolve) => {
-    // //   setTimeout(resolve, 6666)
-    // // })
+        observable.subscribe(logbooks => {
+            console.log('Currently have ' + logbooks.length + ' logbooks', logbooks);
+        });
 
-    return db
-  }
+        return db
+      })
+    }
 
   /**
    *
@@ -75,13 +79,13 @@ export const useDatabase = defineStore('entriesDb', () => {
   }
 
   function getLogbooksQuery() {
-    // rxdb.logbooks.findOne(logbookId)
+    return db.value.logbooks.find()
   }
 
-  function getLogbookEntriesQuery(logbook: string) {
+  function getLogbookEntriesQuery(id: string) {
     return db.value.entries
       .find()
-      .where({ logbook })
+      .where({ id })
       .sort('timestamp')
   }
 

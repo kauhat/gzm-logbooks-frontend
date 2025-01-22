@@ -27,21 +27,20 @@ export default defineNuxtConfig({
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
-  // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
-
   // https://nuxtjs.org/guide/runtime-config
   runtimeConfig: {
-  public: {
-    siteTitle,
-    appInfo: { name, version, branch, shaRef, buildName },
+    public: {
+      siteTitle,
+      appInfo: { name, version, branch, shaRef, buildName },
 
-    services: {
-      dropboxAppKey: process.env.DROPBOX_APP_KEY,
-      googleDriveClientId: process.env.GOOGLE_DRIVE_CLIENT_ID
-    }
+      services: {
+        dropboxAppKey: process.env.DROPBOX_APP_KEY,
+        googleDriveClientId: process.env.GOOGLE_DRIVE_CLIENT_ID
+      }
+    },
   },
-},
+
+  app:{
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -56,9 +55,7 @@ export default defineNuxtConfig({
       class: ''
     }
   },
-
-  // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+},
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -70,30 +67,13 @@ export default defineNuxtConfig({
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // https://pinia.vuejs.org/ssr/nuxt.html
+  // Modules: https://go.nuxtjs.dev/config-modules
+  modules: [
+    '@nuxt/eslint',
     '@pinia/nuxt',
-
-    // https://github.com/nuxt-community/color-mode-module
-    '@nuxtjs/color-mode',
-
-    // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
-
-    // '@nuxtjs/eslint-config-typescript',
-
-    // https://go.nuxtjs.dev/tailwindcss
-    // '@nuxtjs/tailwindcss',
-
-    // https://vueformulate.com/guide
-    // '@braid/vue-formulate/nuxt',
-
+    '@nuxtjs/tailwindcss',
     '@formkit/nuxt'
   ],
-
-  // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss'],
 
   //
   generate: {
@@ -101,10 +81,6 @@ export default defineNuxtConfig({
   },
 
   devServerHandlers: [],
-
-  colorMode: {
-    classSuffix: ''
-  },
 
   tailwindcss: {
     // add '#tailwind-config` alias

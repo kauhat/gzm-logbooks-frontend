@@ -24,14 +24,14 @@
 
     <div class="flex justify-end gap-2 mb-4" />
 
-    <Card class="mb-4 bg-base-200">
+    <Card v-if="rxdb" class="mb-4 bg-base-200">
       <template #title />
 
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <LogbookItem
           v-for="logbook in logbooks"
-          :key="logbook.primary"
-          :primary="logbook.primary"
+          :key="logbook.id"
+          :primary="logbook"
         />
 
         <Card>
@@ -45,18 +45,21 @@
 </template>
 
 <script setup lang="ts">
-import { useSubscription } from '@vueuse/rxjs'
+import { useSubscription, useObservable  } from '@vueuse/rxjs'
 import { useDatabase } from '~/store/database'
 
-const { rxdb, seed } = useDatabase()
-const { logbooks } = useAsyncData(() => {
-  const logbooks = ref([])
-  const logbooksQuery = rxdb.logbooks.find()
+const { rxdb, seed, getLogbooksQuery } = useDatabase()
+// const { logbooks } = useAsyncData(() => {
+//   const logbooks = ref([])
+//   const logbooksQuery = rxdb.logbooks.find()
 
-  useSubscription(
-    logbooksQuery.$.subscribe(logbooks => (logbooks = logbooks))
-  )
+//   useSubscription(
+//     logbooksQuery.$.subscribe(logbooks => (logbooks = logbooks))
+//   )
 
-  return { logbooks }
-})
+//   return { logbooks }
+// })
+
+const logbooks = useObservable(getLogbooksQuery().$)
+
 </script>

@@ -27,7 +27,7 @@
       </svg>
 
       <div class="grid grid-cols-4 gap-1">
-        <div v-for="color in themeBgColors" :class="`${color}`" class="h-8 p-1 rounded-sm shadow-xs"></div>
+        <div v-for="color in themeBgColors" :class="`${color}`" class="h-8 p-1 rounded-sm shadow-xs"/>
       </div>
 
       <button class="btn btn-primary btn-lg p-4">

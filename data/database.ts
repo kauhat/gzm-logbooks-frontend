@@ -28,7 +28,7 @@ export const collections = {
         }
 
         return {
-          name: 'logbooks-logbookId',
+          name:"logbooks-_logbookId",
           params: {
             logbookId: primary
           }

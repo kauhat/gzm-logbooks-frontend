@@ -9,8 +9,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
-    "lint": "bun lint:js"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@braid/vue-formulate": "^2.5.3",
@@ -29,6 +29,7 @@
     "events": "^3.3.0",
     "lodash-es": "^4.17.21",
     "lokijs": "^1.5.12",
+    "nanoid": "^5.0.9",
     "pinia": "^2.3.1",
     "remotestorage-widget": "^1.6.0",
     "remotestoragejs": "^2.0.0-beta.7",
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.26.5",
     "@formkit/nuxt": "^1.6.9",
+    "@nuxt/eslint": "^0.7.5",
     "@nuxt/types": "^2.18.1",
     "@nuxt/typescript-build": "^3.0.2",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",

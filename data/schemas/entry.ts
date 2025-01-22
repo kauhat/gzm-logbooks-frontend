@@ -1,7 +1,9 @@
-import {
-  toTypedRxJsonSchema,
+import type {
   ExtractDocumentTypeFromTypedRxJsonSchema,
   RxJsonSchema
+} from 'rxdb';
+import {
+  toTypedRxJsonSchema
 } from 'rxdb'
 
 export const entrySchemaLiteral =

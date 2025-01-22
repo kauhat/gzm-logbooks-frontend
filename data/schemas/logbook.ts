@@ -1,25 +1,32 @@
-import {
-  toTypedRxJsonSchema,
+import type {
   ExtractDocumentTypeFromTypedRxJsonSchema,
   RxJsonSchema
+} from 'rxdb';
+import {
+  toTypedRxJsonSchema
 } from 'rxdb'
 
 export const logbookSchemaLiteral = {
   title: 'logbook',
   type: 'object',
+  primaryKey: 'id',
   version: 3,
   properties: {
+    id: {
+      type: 'string',
+      maxLength: 100,
+      final: true
+    },
     name: {
       type: 'string',
       maxLength: 100
     }
   },
-  primaryKey: 'name',
   required: [
+    'id',
     'name'
   ],
-  indexes: [
-  ]
+  // indexes: []
 } as const // <- It is important to set 'as const' to preserve the literal type
 
 const schemaTyped = toTypedRxJsonSchema(logbookSchemaLiteral)

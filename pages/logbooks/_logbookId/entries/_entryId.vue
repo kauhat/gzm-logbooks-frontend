@@ -11,7 +11,7 @@
           class="btn btn-outline"
           :to="logbook.getRoute()"
         >
-          Back to logbook "{{ $get(logbook, 'name') }}"
+          Back to logbook "{{ logbook.value.name }}"
         </nuxt-link>
       </template>
     </LayoutPageHeader>
