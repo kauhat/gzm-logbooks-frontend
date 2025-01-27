@@ -47,37 +47,37 @@ import { format } from 'date-fns'
 import { useDatabase } from '~/store/database'
 
 export default {
-  async setup () {
+  async setup() {
     const { logbookId } = this.$route.params
-    const { rxdb } = useDatabase()
+    const { userData } = storeToRefs(useDatabase())
 
     // Get logbook record from database.
-    this.logbook = await rxdb.logbooks.findOne(logbookId).exec()
+    this.logbook = userData.logbooks.findOne(logbookId).exec()
     // Redirect if logbook is missing.
     if (!this.logbook) {
       return navigateTo({ name: 'logbooks' })
     }
   },
-  data () {
+  data() {
     return {
       fields: {
-        timestamp: format(new Date(), 'yyyy-MM-dd')
+        timestamp: format(new Date(), 'yyyy-MM-dd'),
       },
-      logbook: {}
+      logbook: {},
     }
   },
 
   methods: {
-    async save (fields) {
+    async save(fields) {
       const { logbook } = this
-      const { rxdb } = useDatabase()
+      const { userData } = storeToRefs(useDatabase())
       const { comment, mood } = fields
       // Build document data.
       const data = {
         ...mood,
         comment,
         timestamp: new Date(fields.timestamp).toISOString(),
-        logbook: logbook.primary
+        logbook: logbook.primary,
       }
       // Create document in db.
       const doc = await db.entries.insert(data)
@@ -86,7 +86,7 @@ export default {
         // Back to logbook.
         return navigateTo(this.logbook.getRoute())
       }
-    }
-  }
+    },
+  },
 }
 </script>

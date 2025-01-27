@@ -1,10 +1,24 @@
 // Load schemas.
-import { entrySchemaLiteral, entrySchema } from '~/data/schemas/entry.ts'
-import { logbookSchemaLiteral, logbookSchema } from '~/data/schemas/logbook.ts'
+import type { RxDatabase } from 'rxdb'
+import {
+  LogbookEntrySchemaLiteral,
+  logbookEntrySchema,
+  LogbookSchemaLiteral,
+  logbookSchema,
+  type LogbookCollection,
+  type LogbookEntryCollection,
+} from '~/data/schemas'
+
+export type DatabaseCollections = {
+  logbooks: LogbookCollection
+  entries: LogbookEntryCollection
+}
+
+export type UserDatabase = RxDatabase<DatabaseCollections>
 
 export const schemas = {
-  entrySchema,
-  logbookSchema
+  logbookEntrySchema,
+  logbookSchema,
 }
 
 export const collections = {
@@ -14,9 +28,9 @@ export const collections = {
 
     migrationStrategies: {
       // TODO: Add migrations for previous versions.
-      1: () => { },
-      2: () => { },
-      3: () => { },
+      1: () => {},
+      2: () => {},
+      3: () => {},
     },
 
     methods: {
@@ -28,10 +42,10 @@ export const collections = {
         }
 
         return {
-          name:"logbooks-_logbookId",
+          name: 'logbooks-_logbookId',
           params: {
-            logbookId: primary
-          }
+            logbookId: primary,
+          },
         }
       },
 
@@ -45,22 +59,22 @@ export const collections = {
         return {
           name: 'logbooks-logbookId-entries-new',
           params: {
-            logbookId: primary
-          }
+            logbookId: primary,
+          },
         }
-      }
-    }
+      },
+    },
   },
 
   //
   entries: {
-    schema: entrySchema,
+    schema: logbookEntrySchema,
 
     migrationStrategies: {
       // TODO: Add migrations for previous versions.
-      1: () => { },
-      2: () => { },
-      3: () => { }
+      1: () => {},
+      2: () => {},
+      3: () => {},
     },
 
     methods: {
@@ -75,10 +89,10 @@ export const collections = {
           name: 'logbooks-logbookId-entries-entryId',
           params: {
             logbookId: logbook,
-            entryId: primary
-          }
+            entryId: primary,
+          },
         }
-      }
-    }
-  }
+      },
+    },
+  },
 }

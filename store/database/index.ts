@@ -1,20 +1,14 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import type {
-  RxDatabase,
-  RxStorage
-} from 'rxdb';
-import { addRxPlugin,
-  createRxDatabase,
-  removeRxDatabase
-} from 'rxdb'
-import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
-import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
+import type { RxDatabase, RxStorage } from 'rxdb'
+import { addRxPlugin, createRxDatabase, removeRxDatabase } from 'rxdb'
+import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
+import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv'
 // import { addPouchPlugin,  } from 'rxdb/plugins/lokijs'
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema'
 // import * as IndexeddbAdaptor from 'pouchdb-adapter-indexeddb'
-import { schemas, collections } from '~/data/database'
+import { schemas, collections, type UserDatabase } from '~/data/database'
 import { seedFakeLogbook } from '~/store/database/seeder'
 
 // Add plugins.
@@ -27,86 +21,109 @@ if (import.meta.env.DEV) {
   addRxPlugin(RxDBDevModePlugin)
 }
 
-export const useDatabase = defineStore('entriesDb', () => {
-  const db = shallowRef<RxDatabase>()
+/**
+ *
+ */
+async function createUserDatabase(
+  storage: RxStorage<unknown, unknown>,
+): Promise<UserDatabase> {
+  const db = (await createRxDatabase({
+    name: 'logbooks',
+    storage: storage,
+  })) as UserDatabase
 
-  const storage = shallowRef<RxStorage<any, any>>(
-      wrappedValidateAjvStorage({
-      storage: getRxStorageDexie()
-    }
-  ))
+  await db.addCollections(collections)
 
-  /**
-   *
-   */
-  async function createDatabase() {
-    db.value = await createRxDatabase({
-      name: 'logbooks',
-      storage: storage.value
+  // Delay for testing 😈
+  // // await new Promise((resolve) => {
+  // //   setTimeout(resolve, 6666)
+  // // })
+
+  // Attach observer...
+  // const observable = db.logbooks.find().$
+
+  // observable.subscribe((logbooks) => {
+  //   console.log('Currently have ' + logbooks.length + ' logbooks', logbooks)
+  // })
+
+  return db
+}
+
+/**
+ *
+ */
+async function resetDatabase(database: RxDatabase) {
+  if (confirm('This will delete all of your data!') !== true) {
+    return
+  }
+
+  //
+  console.warn('Deleting database...')
+
+  const deleted = await removeRxDatabase(database.name, database.storage)
+
+  console.log(`Deleted ${deleted.length} collections`)
+}
+
+export const useDatabase = defineStore('userDatabase', () => {
+  const databaseRef = shallowRef<UserDatabase>()
+  const storageRef = shallowRef<RxStorage<unknown, unknown>>()
+
+  const readyPromise = (async function () {
+    const newStorage = wrappedValidateAjvStorage({
+      storage: getRxStorageDexie(),
     })
 
-    await db.value.addCollections(collections)
-      .then(async function (db) {
-        // Delay for testing 😈
-        // // await new Promise((resolve) => {
-        // //   setTimeout(resolve, 6666)
-        // // })
+    const newDb = await createUserDatabase(newStorage)
 
-        console.log(await db.logbooks.find().exec())
+    databaseRef.value = newDb
+    storageRef.value = newStorage
 
-        const observable = db.logbooks.find().$;
+    return databaseRef.value
+  })()
 
-        observable.subscribe(logbooks => {
-            console.log('Currently have ' + logbooks.length + ' logbooks', logbooks);
-        });
+  async function getUserDatabase() {
+    return await readyPromise
+  }
 
-        return db
-      })
-    }
+  async function resetUserDatabase() {
+    await resetDatabase(await readyPromise)
 
-  /**
-   *
-   */
-  async function resetDatabase() {
-    if (confirm('This will delete all of your data!') !== true) {
-      return
-    }
+    window.location.reload()
+  }
 
-    //
-    console.warn('Deleting database...')
+  async function seedUserLogbook() {
+    console.info('Seeding user logbook(s)')
 
-    await removeRxDatabase('logbooks', storage.value)
+    return Promise.all([seedFakeLogbook(await getUserDatabase())])
   }
 
   function getLogbooksQuery() {
-    return db.value.logbooks.find()
+    return databaseRef.value?.logbooks.find()
   }
 
   function getLogbookEntriesQuery(id: string) {
-    return db.value.entries
-      .find()
-      .where({ id })
-      .sort('timestamp')
+    return databaseRef.value?.entries.find().where({ id }).sort('timestamp')
   }
 
-  createDatabase()
-
-
   return {
-    db,
-    rxdb: db,
+    readyPromise,
 
-    createDatabase,
-    resetDatabase,
+    userData: computed(() => databaseRef.value),
+
+    storageRef,
+    databaseRef,
 
     getLogbooksQuery,
     getLogbookEntriesQuery,
     // fetchState: db,
     // entries:  computed(() => db.value.entries),
-    seed: () => {
 
-      console.log(db.value)
-      seedFakeLogbook(db.value) }
+    getUserDatabase,
+    resetUserDatabase,
+    seedUserLogbook,
+
+    logbooks: computed(() => databaseRef.value?.logbooks),
   }
 })
 

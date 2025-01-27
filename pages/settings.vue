@@ -55,11 +55,11 @@
 import tailwindConfig from '#tailwind-config'
 
 export default {
-  data () {
+  data() {
     return {}
   },
   computed: {
-    themeNames () {
+    themeNames() {
       // Get themes list from daisyui config.
       // const fullConfig = resolveConfig(tailwindConfig)
 
@@ -96,14 +96,14 @@ export default {
         .filter(function (themeName) {
           return typeof themeName === 'string'
         })
-    }
+    },
   },
-  mounted () {
+  mounted() {
     const { themeNames } = this
 
     // console.log({ tailwindConfig, themeNames })
     // debugger
   },
-  methods: {}
+  methods: {},
 }
 </script>

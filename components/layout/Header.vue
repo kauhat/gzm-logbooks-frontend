@@ -121,16 +121,17 @@ export default {
   },
 
   methods: {
-    async resetDatabase () {
+    async resetDatabase (): Promise<void> {
       // TODO: Get storage..
       // const router = useRouter()
       const { $router } = this
+      const { resetUserDatabase } = useDatabase()
 
-      try {
-        await useDatabase().resetDatabase()
-      } finally {
-        await reloadNuxtApp();
-      }
+      await resetUserDatabase()
+
+      await reloadNuxtApp();
+
+      console.log("Reloading app...")
     }
   }
 }

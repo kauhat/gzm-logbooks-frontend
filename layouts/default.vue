@@ -19,37 +19,31 @@
 </template>
 
 <script setup lang="ts">
-import { useDatabase } from '~/store/database'
-</script>
-
-<script lang="ts">
+import { useObservable } from '@vueuse/rxjs'
 import { useConfigStore } from '~/store/config'
-const {currentTheme} = storeToRefs(useConfigStore())
+import { useDatabase } from '~/store/database'
+
+const { currentTheme } = storeToRefs(useConfigStore())
+// const { userData } = storeToRefs(useDatabase())
 
 useHead({
   bodyAttrs: {
-    'data-theme': currentTheme
-  }
+    'data-theme': currentTheme,
+  },
 })
 
-const {rxdb} = useDatabase()
+function logError(error) {
+  const { message, stack } = error
 
-export default {
-  computed: {
-    themeName () {
-      const configStore = useConfigStore()
+  console.error({ message, stack })
 
-      return configStore.currentTheme
-    }
-  },
-  mounted () {
-    // Print routes for debug.
-    // console.log('Routes...', this.$nuxt.context.app.router.getRoutes())
-  },
-  methods: {
-    logError: error => console.error(error)
-  }
+  return error
 }
+
+const { getUserDatabase } = useDatabase()
+
+// const db = useObservable((await getUserDatabase()).$)
+
 </script>
 
 <style>

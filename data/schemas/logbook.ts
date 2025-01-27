@@ -1,10 +1,10 @@
 import type {
   ExtractDocumentTypeFromTypedRxJsonSchema,
-  RxJsonSchema
-} from 'rxdb';
-import {
-  toTypedRxJsonSchema
+  RxCollection,
+  RxDocument,
+  RxJsonSchema,
 } from 'rxdb'
+import { toTypedRxJsonSchema } from 'rxdb'
 
 export const logbookSchemaLiteral = {
   title: 'logbook',
@@ -15,24 +15,43 @@ export const logbookSchemaLiteral = {
     id: {
       type: 'string',
       maxLength: 100,
-      final: true
+      final: true,
     },
     name: {
       type: 'string',
-      maxLength: 100
-    }
+      maxLength: 100,
+    },
   },
-  required: [
-    'id',
-    'name'
-  ],
+  required: ['id', 'name'],
   // indexes: []
-} as const // <- It is important to set 'as const' to preserve the literal type
+} as const
 
 const schemaTyped = toTypedRxJsonSchema(logbookSchemaLiteral)
 
 // aggregate the document type from the schema
-type logbookDocType = ExtractDocumentTypeFromTypedRxJsonSchema<typeof schemaTyped>;
+export type LogbookDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
+  typeof schemaTyped
+>
 
 // create the typed RxJsonSchema from the literal typed object.
-export const logbookSchema: RxJsonSchema<logbookDocType> = logbookSchemaLiteral
+export const logbookSchema: RxJsonSchema<LogbookDocType> = logbookSchemaLiteral
+
+export type LogbookDocMethods = {
+  scream: (v: string) => string
+  getRoute: () => object
+  getNewEntryRoute: () => object
+}
+
+export type LogbookDocument = RxDocument<LogbookDocType, LogbookDocMethods>
+
+// we declare one static ORM-method for the collection
+export type LogbookCollectionMethods = {
+  countAllDocuments: () => Promise<number>
+}
+
+// and then merge all our types
+export type LogbookCollection = RxCollection<
+  LogbookDocType,
+  LogbookDocMethods,
+  LogbookCollectionMethods
+>

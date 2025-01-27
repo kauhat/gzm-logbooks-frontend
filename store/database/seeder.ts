@@ -1,6 +1,8 @@
 import type { RxDatabase, RxDocument } from 'rxdb'
 import { nanoid } from 'nanoid'
 import { growthInputDefaults, validateMoodInput } from '~/data/config'
+import type { UserDatabase } from '~/data/database'
+import type { LogbookDocument } from '~/data/schemas'
 
 const hour = 1000 * 60 * 60
 const day = hour * 24
@@ -11,10 +13,10 @@ const entryFactory = (
   from = new Date(),
   amount = 40,
   step = 2 * week,
-  spread = week
+  spread = week,
 ) => {
   //
-  function getSpread () {
+  function getSpread() {
     return parseInt(Math.random() * spread)
   }
 
@@ -25,7 +27,7 @@ const entryFactory = (
   //   )
   // }
 
-  function getAmounts () {
+  function getAmounts() {
     return fakeMoodInputValues()
   }
 
@@ -42,7 +44,7 @@ const entryFactory = (
     entries.push({
       timestamp: next.toISOString(),
       logbook: logbookId,
-      ...getAmounts()
+      ...getAmounts(),
     })
   }
 
@@ -52,12 +54,15 @@ const entryFactory = (
 /**
  * Create a demo logbook and fill it with fake data.
  */
-export const seedFakeLogbook = async function (db: RxDatabase, delay = 200): RxDocument {
+export const seedFakeLogbook = async function (
+  db: UserDatabase,
+  delay = 200,
+): Promise<LogbookDocument> {
   console.log(db)
 
-  const logbook: RxDocument = await db.logbooks.insert({
+  const logbook = await db.logbooks.insert({
     id: nanoid(),
-    name: 'Example Logbook'
+    name: 'Example Logbook',
   })
 
   let counter = 0
@@ -77,7 +82,7 @@ export const seedFakeLogbook = async function (db: RxDatabase, delay = 200): RxD
  *
  * @returns
  */
-export function fakeMoodInputValues () {
+export function fakeMoodInputValues() {
   const { padding, minRadius } = growthInputDefaults
 
   // const max = { red: 0.05, amber: 0.33 }
@@ -86,12 +91,12 @@ export function fakeMoodInputValues () {
 
   const amountAmber = Math.max(
     Math.random() * (1 - minRadius - padding * 2) + minRadius + padding,
-    amountGreen + padding
+    amountGreen + padding,
   )
 
   return validateMoodInput({
     amountGreen,
     amountAmber,
-    amountRed: 1
+    amountRed: 1,
   })
 }

@@ -1,6 +1,5 @@
 {
     "recommendations": [
-        "arrterian.nix-env-selector",
         "bradlc.vscode-tailwindcss",
         "dbaeumer.vscode-eslint",
         "editorconfig.editorconfig",

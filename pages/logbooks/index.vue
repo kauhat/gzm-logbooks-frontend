@@ -16,7 +16,7 @@
           Create blank logbook
         </nuxt-link>
 
-        <button class="btn btn-info animate-bounce" @click="seed">
+        <button class="btn btn-info animate-bounce" @click="seedUserLogbook">
           Generate demo logbook
         </button>
       </template>
@@ -24,14 +24,14 @@
 
     <div class="flex justify-end gap-2 mb-4" />
 
-    <Card v-if="rxdb" class="mb-4 bg-base-200">
+    <Card class="mb-4 bg-base-200" v-if="logbooks">
       <template #title />
 
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <LogbookItem
           v-for="logbook in logbooks"
-          :key="logbook.id"
-          :primary="logbook"
+          :key="logbook?.id"
+          :document="logbook"
         />
 
         <Card>
@@ -45,21 +45,22 @@
 </template>
 
 <script setup lang="ts">
-import { useSubscription, useObservable  } from '@vueuse/rxjs'
+import { useSubscription, useObservable } from '@vueuse/rxjs'
 import { useDatabase } from '~/store/database'
 
-const { rxdb, seed, getLogbooksQuery } = useDatabase()
-// const { logbooks } = useAsyncData(() => {
-//   const logbooks = ref([])
-//   const logbooksQuery = rxdb.logbooks.find()
+const { getUserDatabase, seedUserLogbook, getLogbooksQuery } = useDatabase()
+const { userData } = storeToRefs(useDatabase())
 
-//   useSubscription(
-//     logbooksQuery.$.subscribe(logbooks => (logbooks = logbooks))
-//   )
+// const logbooks = ref(null);
+const db = await getUserDatabase()
+// await db.waitForLeadership()
+const logbooks = useObservable(db.logbooks.find({}).$)
 
-//   return { logbooks }
-// })
+onMounted(() => {
+  console.log('Mounted', {...logbooks.value})
+})
 
-const logbooks = useObservable(getLogbooksQuery().$)
-
+watchEffect(() => {
+  console.log('Changed', logbooks.value)
+})
 </script>

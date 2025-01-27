@@ -23,12 +23,11 @@ import {
   Filler,
   Legend,
   Title,
-  Tooltip
+  Tooltip,
 } from 'chart.js'
 // import { Vue } from '#app'
 // import VueRx from 'vue-rx'
 import 'chartjs-adapter-date-fns'
-
 
 //
 // Vue.use(VueRx)
@@ -59,7 +58,7 @@ Chart.register(
   Filler,
   Legend,
   Title,
-  Tooltip
+  Tooltip,
 )
 
 /**
@@ -70,7 +69,7 @@ export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
 
   return {
     provide: {
-      poopies: true
-    }
+      poopies: true,
+    },
   }
 })

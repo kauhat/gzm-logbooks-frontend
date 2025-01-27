@@ -23,16 +23,17 @@ import { useDatabase } from '~/store/database'
 
 export default {
   methods: {
-    async save (fields) {
-      const { rxdb } = useDatabase()
+    async save(fields) {
+      const { userData } = useDatabase()
 
       // Create document in db.
-      const doc = await rxdb.logbooks.insert(fields)
+      const doc = userData.logbooks.insert(fields)
 
-      if (doc)
-      // Redirect to logbook page.
-      { return navigateTo(doc?.getRoute()) }
-    }
-  }
+      if (doc) {
+        // Redirect to logbook page.
+        return navigateTo(doc?.getRoute())
+      }
+    },
+  },
 }
 </script>

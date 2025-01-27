@@ -46,9 +46,7 @@
     <!-- -->
     <template v-if="!$fetchState.pending" #debug>
       <Card>
-        <template #title>
-          Saved data
-        </template>
+        <template #title> Saved data </template>
         <pre>{{ JSON.stringify(entry, null, 2) }}</pre>
       </Card>
     </template>
@@ -60,15 +58,14 @@ import { format, formatDistance } from 'date-fns'
 import { useDatabase } from '~/store/database'
 
 export default {
-
-  async setup () {
+  async setup() {
     const { logbookId, entryId } = this.$route.params
-    const { rxdb } = useDatabase()
+    const { userData } = storeToRefs(useDatabase())
 
     // Get entry record from database.
     this.entry = await db.entries
       .findOne({
-        selector: { logbook: logbookId, _id: entryId }
+        selector: { logbook: logbookId, _id: entryId },
       })
       .exec()
 
@@ -83,19 +80,19 @@ export default {
     // Set form data.
     this.reset()
   },
-  data () {
+  data() {
     return {
       entry: {},
       fields: {},
-      logbook: null
+      logbook: null,
     }
   },
 
   computed: {
-    loading () {
+    loading() {
       return this.$fetchState?.pending
     },
-    date () {
+    date() {
       const { timestamp } = this.entry
 
       if (timestamp) {
@@ -104,28 +101,28 @@ export default {
 
       return ''
     },
-    dateRelative () {
+    dateRelative() {
       const { timestamp } = this.entry
 
       if (timestamp) {
         return formatDistance(new Date(timestamp), new Date(), {
-          addSuffix: true
+          addSuffix: true,
         })
       }
 
       return ''
-    }
+    },
   },
 
   methods: {
-    reset () {
+    reset() {
       const {
         timestamp,
         comment,
 
         amountRed,
         amountAmber,
-        amountGreen
+        amountGreen,
       } = this.entry
 
       //
@@ -135,12 +132,12 @@ export default {
         mood: {
           amountRed,
           amountAmber,
-          amountGreen
-        }
+          amountGreen,
+        },
       }
     },
 
-    async save (fields) {
+    async save(fields) {
       const { logbook } = this
 
       const { comment, mood } = fields
@@ -150,7 +147,7 @@ export default {
         ...mood,
         comment,
         timestamp: new Date(fields.timestamp).toISOString(),
-        logbook: logbook.primary
+        logbook: logbook.primary,
       }
 
       // Create document in db.
@@ -161,7 +158,7 @@ export default {
         // Back to logbook page.
         return navigateTo(this.logbook.getRoute())
       }
-    }
-  }
+    },
+  },
 }
 </script>
