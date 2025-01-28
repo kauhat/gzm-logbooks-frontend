@@ -8,7 +8,7 @@
 
       <template #top>
         <div class="shadow-inner min-h-[8rem]">
-          <!-- <ProgressChart v-if="entries.length > 1" :entries="entries" /> -->
+          <ProgressChart v-if="entries?.length > 1" :entries="entries" />
         </div>
       </template>
     </Card>
@@ -24,11 +24,17 @@ const { document } = defineProps({
   document: { type: Object as PropType<LogbookDocument> , required: true }
 })
 
-console.log({document})
+// console.log({document})
 
 const { getUserDatabase, getLogbookEntriesQuery, getLogbooksQuery } = useDatabase()
 
-const entries = useObservable((await getUserDatabase()) && getLogbookEntriesQuery(document.id).$)
+const entries = useObservable(document.getEntriesQuery(await getUserDatabase()).$)
+
+
+watchEffect(() => {
+  //   console.log('Changed', logbooks.value)
+  // console.log(entries.value)
+})
 
 const countEntries = computed(() => entries.value?.length)
 </script>

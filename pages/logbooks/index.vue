@@ -24,7 +24,7 @@
 
     <div class="flex justify-end gap-2 mb-4" />
 
-    <Card class="mb-4 bg-base-200" v-if="logbooks">
+    <Card v-if="logbooks" class="mb-4 bg-base-200">
       <template #title />
 
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -49,18 +49,17 @@ import { useSubscription, useObservable } from '@vueuse/rxjs'
 import { useDatabase } from '~/store/database'
 
 const { getUserDatabase, seedUserLogbook, getLogbooksQuery } = useDatabase()
-const { userData } = storeToRefs(useDatabase())
 
-// const logbooks = ref(null);
 const db = await getUserDatabase()
 // await db.waitForLeadership()
+
 const logbooks = useObservable(db.logbooks.find({}).$)
 
-onMounted(() => {
-  console.log('Mounted', {...logbooks.value})
-})
+// onMounted(() => {
+//   console.log('Mounted', { ...logbooks.value })
+// })
 
-watchEffect(() => {
-  console.log('Changed', logbooks.value)
-})
+// watchEffect(() => {
+//   console.log('Changed', logbooks.value)
+// })
 </script>

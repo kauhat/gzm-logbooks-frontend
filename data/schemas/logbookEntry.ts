@@ -5,6 +5,7 @@ import type {
   RxJsonSchema,
 } from 'rxdb'
 import { toTypedRxJsonSchema } from 'rxdb'
+import type { RouteLocationNormalized } from 'vue-router'
 
 export const logbookEntrySchemaLiteral = {
   title: 'Entry',
@@ -43,31 +44,50 @@ export const logbookEntrySchemaLiteral = {
 const schemaTyped = toTypedRxJsonSchema(logbookEntrySchemaLiteral)
 
 // aggregate the document type from the schema
-export type LogbookEntryDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
+export type LogbookEntryDocumentType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof schemaTyped
 >
 
-// create the typed RxJsonSchema from the literal typed object.
-export const logbookEntrySchema: RxJsonSchema<LogbookEntryDocType> =
-  logbookEntrySchemaLiteral
-
-export type LogbookEntryDocMethods = {
-  scream: (v: string) => string
+export type LogbookEntryDocumentMethods = {
+  getRoute: () => RouteLocationNormalized
 }
-
-export type LogbookEntryDocument = RxDocument<
-  LogbookEntryDocType,
-  LogbookEntryDocMethods
->
 
 // we declare one static ORM-method for the collection
-export type LogbookEntryCollectionMethods = {
-  countAllDocuments: () => Promise<number>
-}
+export type LogbookEntryCollectionMethods = {}
+
+export type LogbookEntryDocument = RxDocument<
+  LogbookEntryDocumentType,
+  LogbookEntryDocumentMethods,
+  LogbookEntryCollectionMethods
+>
 
 // and then merge all our types
 export type LogbookEntryCollection = RxCollection<
-  LogbookEntryDocType,
-  LogbookEntryDocMethods,
+  LogbookEntryDocumentType,
+  LogbookEntryDocumentMethods,
   LogbookEntryCollectionMethods
 >
+
+// create the typed RxJsonSchema from the literal typed object.
+export const logbookEntrySchema: RxJsonSchema<LogbookEntryDocumentType> =
+  logbookEntrySchemaLiteral
+
+export const logbookEntryDocumentMethods: LogbookEntryDocumentMethods = {
+  getRoute() {
+    const { primary, logbook } = this
+
+    if (!primary || !logbook) {
+      return null
+    }
+
+    return {
+      name: 'logbooks-logbookId-entries-entryId',
+      params: {
+        logbookId: logbook,
+        entryId: primary,
+      },
+    }
+  },
+}
+
+export const logbookEntryCollectionMethods: LogbookEntryCollectionMethods = {}

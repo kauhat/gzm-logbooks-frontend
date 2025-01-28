@@ -1,10 +1,12 @@
 // Load schemas.
-import type { RxDatabase } from 'rxdb'
+import type { RxCollectionCreator, RxDatabase } from 'rxdb'
 import {
-  LogbookEntrySchemaLiteral,
-  logbookEntrySchema,
-  LogbookSchemaLiteral,
   logbookSchema,
+  logbookCollectionMethods,
+  logbookDocumentMethods,
+  logbookEntrySchema,
+  logbookEntryCollectionMethods,
+  logbookEntryDocumentMethods,
   type LogbookCollection,
   type LogbookEntryCollection,
 } from '~/data/schemas'
@@ -28,42 +30,14 @@ export const collections = {
 
     migrationStrategies: {
       // TODO: Add migrations for previous versions.
-      1: () => {},
-      2: () => {},
-      3: () => {},
+      1: (_oldDocumentData, _collection) => {},
+      2: (_oldDocumentData, _collection) => {},
+      3: (_oldDocumentData, _collection) => {},
     },
 
-    methods: {
-      getRoute() {
-        const { primary } = this
+    statics: logbookCollectionMethods,
 
-        if (!primary) {
-          return null
-        }
-
-        return {
-          name: 'logbooks-_logbookId',
-          params: {
-            logbookId: primary,
-          },
-        }
-      },
-
-      getNewEntryRoute() {
-        const { primary } = this
-
-        if (!primary) {
-          return null
-        }
-
-        return {
-          name: 'logbooks-logbookId-entries-new',
-          params: {
-            logbookId: primary,
-          },
-        }
-      },
-    },
+    methods: logbookDocumentMethods,
   },
 
   //
@@ -72,27 +46,13 @@ export const collections = {
 
     migrationStrategies: {
       // TODO: Add migrations for previous versions.
-      1: () => {},
-      2: () => {},
-      3: () => {},
+      1: (_oldDocumentData, _collection) => {},
+      2: (_oldDocumentData, _collection) => {},
+      3: (_oldDocumentData, _collection) => {},
     },
 
-    methods: {
-      getRoute() {
-        const { primary, logbook } = this
+    statics: logbookEntryCollectionMethods,
 
-        if (!primary || !logbook) {
-          return null
-        }
-
-        return {
-          name: 'logbooks-logbookId-entries-entryId',
-          params: {
-            logbookId: logbook,
-            entryId: primary,
-          },
-        }
-      },
-    },
+    methods: logbookEntryDocumentMethods,
   },
-}
+} as { [toVersion: string]: RxCollectionCreator }
