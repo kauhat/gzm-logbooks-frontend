@@ -7,7 +7,7 @@ import type {
   RxQuery,
 } from 'rxdb'
 import { toTypedRxJsonSchema } from 'rxdb'
-import type { RouteLocationNormalized } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router'
 
 export const logbookSchemaLiteral = {
   title: 'logbook',
@@ -38,8 +38,8 @@ export type LogbookDocumentType = ExtractDocumentTypeFromTypedRxJsonSchema<
 
 export type LogbookDocumentMethods = {
   getEntriesQuery: (database: RxDatabase) => RxQuery
-  getRoute: () => RouteLocationNormalized
-  getNewEntryRoute: () => RouteLocationNormalized
+  getRoute: () => RouteLocationRaw
+  getNewEntryRoute: () => RouteLocationRaw
 }
 
 export type LogbookCollectionMethods = {
@@ -76,20 +76,20 @@ export const logbookDocumentMethods: LogbookDocumentMethods = {
       .sort('timestamp')
   },
 
-  getRoute(): RouteLocationNormalized {
+  getRoute(): RouteLocationRaw {
     console.log(toRaw(this))
 
     const { primary, id } = this as LogbookDocument
 
     return {
-      name: 'logbooks-_logbookId',
+      name: 'logbooks-logbookId',
       params: {
         logbookId: primary,
       },
     }
   },
 
-  getNewEntryRoute(): RouteLocationNormalized {
+  getNewEntryRoute(): RouteLocationRaw {
     const { primary, id } = this as LogbookDocument
 
     return {

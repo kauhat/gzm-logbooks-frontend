@@ -5,7 +5,7 @@ import type {
   RxJsonSchema,
 } from 'rxdb'
 import { toTypedRxJsonSchema } from 'rxdb'
-import type { RouteLocationNormalized } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router'
 
 export const logbookEntrySchemaLiteral = {
   title: 'Entry',
@@ -49,7 +49,7 @@ export type LogbookEntryDocumentType = ExtractDocumentTypeFromTypedRxJsonSchema<
 >
 
 export type LogbookEntryDocumentMethods = {
-  getRoute: () => RouteLocationNormalized
+  getRoute: () => RouteLocationRaw
 }
 
 // we declare one static ORM-method for the collection
